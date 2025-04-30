@@ -36,5 +36,5 @@ jobs:
       - name: Upload logs zip as artifact (with semantic version)
         uses: actions/upload-artifact@v4
         with:
-          name: workflow-logs-${{ env.semver }}
+          name: workflow-logs-runid-${{ github.event.workflow_run.id }}
           path: ci_logs.zip
