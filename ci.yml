@@ -1,0 +1,43 @@
+name: Continuous Integration
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches: ['main']
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: write
+      pull-requests: write
+      id-token: write
+
+    steps:
+      - name: Checkout repository code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Build myapp
+        run: echo "Build myapp"
+
+      - name: Static testing of myapp
+        run: echo "Static testing of myapp"
+
+      - name: Set dummy semantic version
+        id: set_semver
+        run: |
+          echo "semver=V1.2.3" >> $GITHUB_OUTPUT       
+
+      - name: Deploying the binary to CI Test Environment
+        run: echo "Deploying myapp_${{ steps.set_semver.outputs.semver }} to Test Environment"
+
+      - name: Run the set of CI tests in CI Test Environment
+        run: echo "Run the set of CI tests in CI Test Environment"
+
+      - name: Push and tag to GitHub packages
+        run: echo "Push and tag myapp_${{ steps.set_semver.outputs.semver }}"
