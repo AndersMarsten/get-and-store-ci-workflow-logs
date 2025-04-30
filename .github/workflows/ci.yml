@@ -29,7 +29,7 @@ jobs:
         run: echo "Static testing of myapp"
 
       - name: Expose current workflow run id
-        run: echo "Current run id: ${{ github.event.workflow_run.id }}"
+        run: echo "Current run id can I get the run id here "
 
       - name: Set dummy semantic version
         id: set_semver
