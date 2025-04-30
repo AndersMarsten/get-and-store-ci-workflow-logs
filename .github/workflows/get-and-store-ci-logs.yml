@@ -1,0 +1,40 @@
+name: Get CI Workflow Logs
+
+on:
+  workflow_run:
+    workflows: ["Continuous Integration"]
+    types: [completed]
+
+jobs:
+  fetch-ci-logs:
+    runs-on: ubuntu-latest
+
+    permissions:
+      packages: write
+      contents: write
+      pull-requests: write
+      id-token: write
+      actions: read
+
+    steps:
+      - name: Checkout repository code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download CI workflow logs using GitHub API
+        run: |
+          echo "Downloading CI logs..."
+          curl -L \
+            -H "Accept: application/vnd.github.v3+json" \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            -o ci_logs.zip \
+            https://api.github.com/repos/${{ github.repository }}/actions/runs/${{ github.event.workflow_run.id }}/logs
+
+
+      - name: Upload logs zip as artifact (with semantic version)
+        uses: actions/upload-artifact@v4
+        with:
+          name: workflow-logs-${{ env.semver }}
+          path: ci_logs.zip
