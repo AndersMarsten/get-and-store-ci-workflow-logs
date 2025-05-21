@@ -23,7 +23,7 @@ jobs:
           fetch-depth: 0
 
       - name: Build myapp
-        run: echo "Build myapp"
+        run: echo "Building myapp"
 
       - name: Static testing of myapp
         run: echo "Static testing of myapp"
